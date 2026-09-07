@@ -52,3 +52,16 @@ body {
 *::-webkit-scrollbar-thumb:hover {
   background-color: rgba(139, 92, 246, 0.8); /* violet-500 on hover */
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.3s 0s linear infinite;
+}

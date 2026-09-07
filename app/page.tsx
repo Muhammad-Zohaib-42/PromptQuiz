@@ -1,11 +1,7 @@
-import {
-  ClipboardCheck,
-  FileQuestion,
-  LogIn,
-  MessageCircleQuestionMark,
-} from "lucide-react";
+import { ClipboardCheck, MessageCircleQuestionMark } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import HeaderActions from "@/components/HeaderActions";
+import HeroActions from "@/components/HeroActions";
 
 export default function Home() {
   return (
@@ -15,15 +11,7 @@ export default function Home() {
           <ClipboardCheck size={24} className="text-violet-500" />
           <span className="text-xl mt-0.5 tracking-tight">PromptQuiz</span>
         </div>
-        <Link
-          href="/login"
-          className="px-6 py-2 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full"
-        >
-          <span className="text-[16px]">Login</span>
-        </Link>
-        {/* <Link href="/dashboard" className="px-6 py-2 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full">
-      <span className="text-[16px]">Dashboard</span>
-    </Link> */}
+        <HeaderActions />
       </header>
 
       <main className="grow grid grid-cols-1 lg:grid-cols-2 items-center px-8 lg:px-16 py-6 md:py-0 gap-12 overflow-hidden">
@@ -40,12 +28,7 @@ export default function Home() {
             quiz tailored precisely to what you want to learn or test.
           </p>
           <div className="flex items-center gap-4 pt-2">
-            <Link
-              href="/dashboard"
-              className="px-6 py-3 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full"
-            >
-              Get Started Free
-            </Link>
+            <HeroActions />
           </div>
         </section>
 
@@ -55,7 +38,7 @@ export default function Home() {
             className="absolute top-0 right-10 md:right-40"
             size={40}
           />
-          <Image src="/robot.png" alt="robot" height={450} width={450} />
+          <Image src="/robot.png" alt="robot" height={450} width={450} loading="eager" />
         </section>
       </main>
     </div>
