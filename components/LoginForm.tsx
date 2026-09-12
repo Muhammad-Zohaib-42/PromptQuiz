@@ -32,7 +32,8 @@ const LoginForm = () => {
       );
 
       if (response.data.success) {
-        setUser(response.data.data.user);
+        setUser({...response.data.data.user, isLogin: true});
+        localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: true}))
         router.push("/dashboard");
         toast.success("Login successful!");
       }
