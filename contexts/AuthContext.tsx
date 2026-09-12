@@ -1,36 +1,30 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios"
+import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState("")
-    const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(() => {
+    if (typeof window == "undefined") return null
 
-    useEffect(() => {
-        async function refreshTokens() {
-          try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/rotate-tokens`, {}, {withCredentials: true})
-            
-            if (response.data.success) {
-              setUser(response.data.data.user)
-              setAccessToken(response.data.data.accessToken)
-              setLoading(false)
-            }
-          } catch(error) {
-            setLoading(false)
-          } finally{
-            setLoading(false)
-          }
-        }
-    
-        refreshTokens()
-      }, [])
+    try {
+      const userJson = localStorage.getItem("user")
 
-    return <AuthContext.Provider value={{ user, setUser, accessToken, setAccessToken, loading }}>
+      if (userJson) {
+        setLoading(false)
+        return JSON.parse(userJson)
+      }else {
+        setLoading(false)
+        return null
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  });
+
+    return <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
         {children}
     </AuthContext.Provider>
 }

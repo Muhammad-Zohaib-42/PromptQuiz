@@ -1,7 +1,6 @@
 import LoginForm from "@/components/LoginForm"
 import { ClipboardCheck } from "lucide-react"
 import Link from "next/link"
-import { ClipLoader } from "react-spinners"
 
 const page = () => {
   return (

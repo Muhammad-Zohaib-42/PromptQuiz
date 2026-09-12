@@ -5,7 +5,6 @@ import { Sparkles, Clock, Layers, Sliders, CheckSquare } from "lucide-react";
 import { ClipLoader } from "react-spinners";
 import { useForm } from "react-hook-form";
 import axios from "axios"
-import { useAuthContext } from "@/contexts/AuthContext";
 import { useQuizContext } from "@/contexts/QuizContext";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -14,7 +13,6 @@ const CreateQuizForm = () => {
   const [enableTimer, setEnableTimer] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const {accessToken} = useAuthContext()
   const {setCurrentQuiz} = useQuizContext()
 
   const router = useRouter()
@@ -44,15 +42,12 @@ const CreateQuizForm = () => {
     data.timer = Number(data.timer)
     data.length = Number(data.length)
 
-    console.log(data)
-
-    try {
+    async function createQuiz() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/create`, data, {
-        withCredentials: true,
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+        withCredentials: true
       })
+
+      console.log(response)
 
       if (response.data.success) {
         setCurrentQuiz(response.data.data.quiz)
@@ -60,9 +55,30 @@ const CreateQuizForm = () => {
         setLoading(false)
         router.push("/quiz")
       }
+    }
+
+    async function rotateTokens() {
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/rotate-tokens`, {}, {
+                withCredentials: true
+            })
+
+            if (response.data.success) {
+              await createQuiz()
+            }
+        } catch (error) {
+            console.log(error.response.data.reason || error.message)
+            toast.error("Please Login")
+            router.push("/login")
+        }
+    }
+
+    try {
+      await createQuiz()
     } catch(error) {
-      console.log(error.response.data.reason)
-      toast.error("Failed to create quiz.")
+      if (error.response.data.reason == "Invalid access token" || error.response.data.reason == "access token is required" || error.response.data.message == "Invalid access token" || error.response.data.message == "access token is required") {
+        await rotateTokens()
+      }
       setLoading(false)
     } finally {
       setLoading(false)

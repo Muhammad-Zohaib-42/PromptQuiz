@@ -11,7 +11,7 @@ const HeroActions = () => {
       {!loading && (
         <Link
           href={
-            !user ? "/login" : !user.isVerified ? "/verify-email" : "/dashboard"
+            !user || !user.isLogin ? "/login" : !user.isVerified ? "/verify-email" : "/dashboard"
           }
           className="px-6 py-3 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full"
         >

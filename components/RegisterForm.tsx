@@ -15,7 +15,7 @@ const RegisterForm = () => {
 
   const router = useRouter()
   const {register, handleSubmit, formState: {errors}} = useForm()
-  const {setUser, setAccessToken} = useAuthContext()
+  const {setUser} = useAuthContext()
 
   const submitHandler = async (data) => {
     setLoading(true)
@@ -24,13 +24,13 @@ const RegisterForm = () => {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`, data, {withCredentials: true})
         
         if (response.data.success) {
-          setUser(response.data.data.user)
-          setAccessToken(response.data.data.accessToken)
+          setUser({...response.data.data.user, isLogin: false})
+          localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: false}))
           router.push("/verify-email")
           toast.success("Please check your email for the OTP verification code")
         }
     } catch (error) {
-        toast.error(error.response.data.reason || error.message)
+        toast.error(error.response?.data?.reason || error.message)
         setLoading(false)
     } finally{
         setLoading(false)

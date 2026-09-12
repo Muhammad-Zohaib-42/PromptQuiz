@@ -16,6 +16,14 @@ const HeaderActions = () => {
           <span className="text-[16px]">Login</span>
         </Link>
       )}
+      {!loading && user && user.isVerified && !user.isLogin && (
+        <Link
+          href="/login"
+          className="px-6 py-2 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full"
+        >
+          <span className="text-[16px]">Login</span>
+        </Link>
+      )}
       {!loading && user && !user.isVerified && (
         <Link
           href="/verify-email"
@@ -24,7 +32,7 @@ const HeaderActions = () => {
           <span className="text-[16px]">Verify Email</span>
         </Link>
       )}
-      {!loading && user && user.isVerified && (
+      {!loading && user && user.isVerified && user.isLogin && (
         <Link
           href="/dashboard"
           className="px-6 py-2 cursor-pointer bg-violet-600 text-white font-medium hover:bg-violet-500 transition-colors shadow-lg shadow-violet-950 rounded-full"

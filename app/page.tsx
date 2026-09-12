@@ -4,6 +4,7 @@ import HeaderActions from "@/components/HeaderActions";
 import HeroActions from "@/components/HeroActions";
 
 export default function Home() {
+
   return (
     <div className="h-auto md:h-dvh flex flex-col bg-zinc-950 text-zinc-50 overflow-hidden">
       <header className="flex items-center justify-between px-2 md:px-8 py-4 border-b border-zinc-800/80 shrink-0">

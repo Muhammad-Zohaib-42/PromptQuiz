@@ -12,7 +12,7 @@ const VerifyEmailForm = () => {
   const [loading, setLoading] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const {user, setUser, setAccessToken} = useAuthContext()
+  const {user, setUser} = useAuthContext()
 
   const router = useRouter()
 
@@ -77,14 +77,19 @@ const VerifyEmailForm = () => {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/verify-email`, {otp: otp.join(""), email: user.email}, {withCredentials: true})
 
         if (response.data.success) {
-            setUser(response.data.data.user)
-            setAccessToken(response.data.data.accessToken)
+            setUser({...response.data.data.user, isLogin: true})
+            localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: true}))
             router.push("/dashboard")
             toast.success("Email verified successfully")
             setLoading(false)
         }
     } catch (error) {
-        console.log(error)
+      const errorMessage = 
+        error.response?.data?.reason || 
+        error.response?.data?.message || 
+        error.message || 
+        "Something went wrong";
+        toast.error(errorMessage)
         setLoading(false)
     } finally{
         setLoading(false)

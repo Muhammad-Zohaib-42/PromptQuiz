@@ -13,7 +13,7 @@ const Sidebar = ({activeTab, setActiveTab}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false)
 
-  const {accessToken, setAccessToken, setUser} = useAuthContext()
+  const {setUser} = useAuthContext()
   const router = useRouter()
 
   async function handleLogout() {
@@ -21,23 +21,18 @@ const Sidebar = ({activeTab, setActiveTab}) => {
 
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/logout`, {}, {
-        withCredentials: true,
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+        withCredentials: true
       })
 
       if (response.data.success) {
-        setAccessToken("")
+        localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: false}))
         setUser(null)
         toast.success("user logout successfully")
         router.push("/")
       }
     } catch(error) {
-      setLoading(false)
-      setUser(null);
-      setAccessToken("");
-      router.push("/");
+      console.dir(error)
+      console.log(error.response.data.message)
     } finally {
       setLoading(false)
     }

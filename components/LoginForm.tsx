@@ -19,7 +19,7 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { setUser, setAccessToken } = useAuthContext();
+  const { setUser } = useAuthContext();
 
   const submitHandler = async (data) => {
     setLoading(true);
@@ -33,12 +33,11 @@ const LoginForm = () => {
 
       if (response.data.success) {
         setUser(response.data.data.user);
-        setAccessToken(response.data.data.accessToken);
         router.push("/dashboard");
         toast.success("Login successful!");
       }
     } catch (error) {
-      toast.error(error.response.data.reason || error.message);
+      toast.error(error.response?.data?.reason || error.message);
       setLoading(false);
     } finally {
       setLoading(false);
