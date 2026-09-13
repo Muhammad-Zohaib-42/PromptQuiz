@@ -13,26 +13,48 @@ const Sidebar = ({activeTab, setActiveTab}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false)
 
-  const {setUser} = useAuthContext()
+  const {user, setUser} = useAuthContext()
   const router = useRouter()
 
   async function handleLogout() {
     setLoading(true)
 
-    try {
+    async function logout() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/logout`, {}, {
         withCredentials: true
       })
 
       if (response.data.success) {
-        localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: false}))
-        setUser({...response.data.data.user, isLogin: false})
+        localStorage.setItem("user", JSON.stringify({...user, isLogin: false}))
+        setUser({...user, isLogin: false})
         toast.success("user logout successfully")
         router.push("/")
       }
+    }
+
+    async function rotateTokens() {
+      try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/rotate-tokens`, {}, {
+          withCredentials: true
+        })
+    
+        if (response.data.success) {
+          await logout()
+        }
+      } catch (error) {
+        console.log(error.response.data.reason || error.message)
+        toast.error("Please Login")
+        router.push("/login")
+      }
+    }
+
+    try {
+      await logout()
     } catch(error) {
-      console.dir(error)
-      console.log(error.response.data.message)
+      if (error.response.data.reason == "Invalid access token" || error.response.data.reason == "access token is required" || error.response.data.message == "Invalid access token" || error.response.data.message == "access token is required") {
+        await rotateTokens()
+      }
+      setLoading(false)
     } finally {
       setLoading(false)
     }

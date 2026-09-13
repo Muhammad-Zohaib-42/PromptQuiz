@@ -47,8 +47,6 @@ const CreateQuizForm = () => {
         withCredentials: true
       })
 
-      console.log(response)
-
       if (response.data.success) {
         setCurrentQuiz(response.data.data.quiz)
         toast.success("Quiz created successfully!")

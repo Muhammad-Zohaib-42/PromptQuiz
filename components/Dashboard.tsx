@@ -1,5 +1,5 @@
 import { useQuizContext } from "@/contexts/QuizContext";
-import { Trophy, ArrowRight, Flame, BarChart3, Clock, MessageCircleQuestionMark } from "lucide-react";
+import { Trophy, ArrowRight, BarChart3, Clock, MessageCircleQuestionMark } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Dashboard = ({ loading, setActiveTab }) => {
