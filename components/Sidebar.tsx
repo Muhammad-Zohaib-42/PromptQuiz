@@ -26,7 +26,7 @@ const Sidebar = ({activeTab, setActiveTab}) => {
 
       if (response.data.success) {
         localStorage.setItem("user", JSON.stringify({...response.data.data.user, isLogin: false}))
-        setUser(null)
+        setUser({...response.data.data.user, isLogin: false})
         toast.success("user logout successfully")
         router.push("/")
       }

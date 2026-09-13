@@ -8,12 +8,13 @@ export const QuizContext = createContext()
 export const QuizProvider = ({children}) => {
     const [quizes, setQuizes] = useState([])
     const [currentQuiz, setCurrentQuiz] = useState({
+      _id: 1,
   topic: "JavaScript & React Fundamentals",
   length: 3,
   difficulty: "Medium",
   format: "Multiple Choice",
   completed: false,
-  timer: 30,
+  timer: 5,
   score: 0,
   accuracy: 0,
   quiz: [
