@@ -43,16 +43,17 @@ const CreateQuizForm = () => {
     data.length = Number(data.length)
 
     async function createQuiz() {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/create`, data, {
-        withCredentials: true
-      })
+      
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/create`, data, {
+          withCredentials: true
+        })
 
-      if (response.data.success) {
-        setCurrentQuiz(response.data.data.quiz)
-        toast.success("Quiz created successfully!")
-        setLoading(false)
-        router.push("/quiz")
-      }
+        if (response.data.success) {
+          setCurrentQuiz(response.data.data.quiz)
+          toast.success("Quiz created successfully!")
+          setLoading(false)
+          router.push("/quiz")
+        }
     }
 
     async function rotateTokens() {
@@ -74,6 +75,7 @@ const CreateQuizForm = () => {
     try {
       await createQuiz()
     } catch(error) {
+      console.log(error.response.data.reason)
       if (error.response.data.reason == "Invalid access token" || error.response.data.reason == "access token is required" || error.response.data.message == "Invalid access token" || error.response.data.message == "access token is required") {
         await rotateTokens()
       }
